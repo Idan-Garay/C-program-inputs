@@ -1,23 +1,28 @@
 #include <stdio.h>
-#include <string.h>
+#include <ctype.h>
 
-void removeVowels(char str[]) {
-    int x, y, ctr, len = strlen(str);
-    char vowels[5] = {'a', 'e', 'i', 'o', 'u'};
-    char temp[len];
-
-    for (ctr = x = 0; str[x] != '\0'; x++) {
-        for (y = 0; y < 5 && vowels[y] != str[x]; y++) {}
-        if (y == 5)
-            temp[ctr++] = str[x];
+void removeVowels(char *str) {
+    int x, y, len;
+    char tmp;
+    
+    for ( x = 0; str[x] != '\0'; x++) {
+        str[x] = tolower(str[x]);
+        tmp = str[x];
+        if (tmp == 'a' || tmp == 'e' || tmp == 'i' || tmp == 'o' || tmp == 'u') {
+            for (y = x; str[y] != '\0'; y++) {
+                str[y] = str[y+1];
+            }
+        }
     }
-    printf("%s", temp);
+
+    printf("%s", str);
+
 }
 
-int main() {
-    char str[100];
 
-    scanf("%[^\n]s", str);
+int main() {
+    char str[] = "Hello World";
+
     removeVowels(str);
 
     return 0;
