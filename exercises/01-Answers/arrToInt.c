@@ -1,36 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int arrToInt(int arr[], int size) {
-    int val, pow, x;
+int convertArrToInt(int arr[], int arrSize) {
+    int retVal = -1;
 
-    val = 0;
-    x = size-1;
-    pow = 1;
-    do {
-        val += arr[x] * pow;
-        pow *= 10;
-        x--;
-    } while (x >= 0);
+    if (arrSize > 1) {
+        int x = 0;
+        retVal = arr[0];
 
-    return val;
+        for (x = 1; x < arrSize; x++) {
+            retVal *= 10;
+            retVal += arr[x] ;
+        }
+    }
+
+    return retVal;
 }
 
 int main() {
-    int *arr, size;
+    int arr[5] = {5,2,1,3,0};
 
-    scanf("%d", &size);
-    arr = (int*) malloc(size * sizeof(int));
+    printf("%d", convertArrToInt(arr, 5));
 
-    if (arr != NULL) {
-        int x = 0;
-
-        for (x = 0; x < size; x++) {
-            scanf("%d", arr+x);
-        }
-        printf("%d", arrToInt(arr, size));
-    }
-    free (arr);
-    
     return 0;
 }
