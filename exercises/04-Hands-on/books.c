@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 
 #define SIZE 1000
 
@@ -19,25 +18,25 @@ typedef struct {
     int ctr; /* contains the actual # of books in bks*/
 }ArrBooks;
 
-Book inputBook();
+Book inputBook(void);
 int addBooks(Book bk, ArrBooks *A);
 void displayBooks(ArrBooks A);
-Book * searchBooks(float price, ArrBooks A);
+Book* searchBooks(float price, ArrBooks A);
 
 int main() {
     ArrBooks newList;
     Book b, *list;
     int x, num, catch;
-    newList.ctr = 0; /*no books yet*/
     float price;
+    newList.ctr = 0; /*no books yet*/
 
-    printf("\nEnter the no. of books to input: ");
+    printf("\nEnter no. of books to input: ");
     scanf("%d", &num);
 
-    for (x = 0; x < num, x++) {
-        b = inputBook();
-        catch = addBooks(b, &newList); /* add books to func call */
-        switch() {
+    for (x = 0; x < num; x++) {
+        b= inputBook();
+        catch = addBooks(b, &newList);
+        switch(catch) {
             case 1: printf("\nSuccessfully added!\n");
                     break;
             case 2: printf("\nOverflow of books!");
@@ -45,63 +44,59 @@ int main() {
         }
     }
 
-    displayBooks(A); /*displayBooks() func call*/
+    displayBooks(newList);
     printf("\n\nEnter book price: ");
     scanf("%f", &price);
-    list = searchBooks(price, newList) /*searchList() func. call*/
+    list = searchBooks(price, newList);
 
-    for (x = 0; x < 3; x++) { /* prints only the first 3 search results */
-        b = list[x];
-        printf("%d %s %s created by %s published by %s", b.YearPub, b.BkInfo.title, b.BkInfo.author, b.BkInfo.publisher); /*print format is the same with displayBooks() */
+    for (x = 0; x < 3; x++) {
+        printf("%d %s created by %s published by %s", list[x].YearPub, list[x].BkInfo.title, list[x].BkInfo.author, list[x].BkInfo.publisher);
     }
-
-    getch();
-    return 0;
-
-    return 0;
 }
 
-Book inputBook() {
+Book inputBook(void) {
     Book bk;
-
-    printf("<author> <title> <publisher> <YearPub> <price>");
-    scanf("%s %s %s %d %f", bk.BkInfo.author, bk.BkInfo.title, bk.BkInfo.publisher, &bk.YearPub, &bk.BookPrice);
-
+    printf("Enter Book details: \n");
+    printf("author: \n"); scanf("%s", bk.BkInfo.author);
+    printf("title: \n"); scanf("&s", bk.BkInfo.title);
+    printf("publisher: \n"); scanf("%s", bk.BkInfo.publisher);
+    printf("price: \n"); scanf("%f", &bk.BookPrice);
+    printf("yearPub: \n"); scanf("%d", &bk.YearPub);
     return bk;
 }
 
 int addBooks(Book bk, ArrBooks *A) {
-    int val = 0;
+    int status = 2;
 
     if (A->ctr < SIZE) {
         A->bks[A->ctr++] = bk;
-        val = 1;
+        status = 1;
     }
-    return val;
+    return status;
 }
 
 void displayBooks(ArrBooks A) {
-    Book bk;
     int x, len;
-
     len = A.ctr;
+
     for (x = 0; x < len; x++) {
-        bk = A.bks[x];
-        printf("%d %s %s created by %s published by %s", bk.YearPub, bk.BkInfo.title, bk.BkInfo.author, bk.BkInfo.publisher);
-    } 
+        printf("%d %s created by %s published by %s", A.bks[x].YearPub, A.bks[x].BkInfo.title, A.bks[x].BkInfo.author, A.bks[x].BkInfo.publisher);
+    }
 }
 
-Book * searchBooks(float price, ArrBooks A) {
-    Book *bks = (Book *) malloc(SIZE*sizeof(Book));
+Book* searchBooks(float price, ArrBooks A) {
+    Book *bks = (Book*) calloc(1000, sizeof(Book));
+    int x, len, count;
+    len = A.ctr;
+    count = 0;
 
-    if (bks != 0) {
-        int x, ctr;
-
-        for (ctr = x = 0; x < A.ctr; x++) {
+    if (bks != NULL) {
+        for (x = 0; x < len; x++) {
             if (A.bks[x].BookPrice == price) 
-                bks[ctr++] = A.bks[x];
+                bks[count++] = A.bks[x];
         }
-        bks = realloc(bks, ctr);
+
+        bks = realloc(bks, sizeof(Book) * count);
     }
     return bks;
 }
