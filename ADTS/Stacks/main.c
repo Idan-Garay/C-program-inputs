@@ -1,4 +1,4 @@
-#include "StackArray.h"
+#include "StackList.h"
 typedef int SET;
 
 int main() {
@@ -7,13 +7,13 @@ int main() {
     int data[] = {1,2,3,4,5};
     
     populateStack(&S, data, 5);
-    displayStack(S);
+    displayStack(&S);
 
     pop(&S);
-    displayStack(S);
+    displayStack(&S);
 
     push(&S, 100);
-    displayStack(S);
+    displayStack(&S);
 
     return 0;
 }
