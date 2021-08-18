@@ -1,19 +1,23 @@
-#include "StackList.h"
+#include "StackCursor.h"
 typedef int SET;
 
 int main() {
 
     Stack S;
     int data[] = {1,2,3,4,5};
+    VHeap VH;
+
+    initCursorStack(&VH, &S);
+    displayCursorStack(VH, S);
     
-    populateStack(&S, data, 5);
-    displayStack(&S);
+    populateCursorStack(&VH, &S, data, 5);
+    displayCursorStack(VH, S);
 
-    pop(&S);
-    displayStack(&S);
+    pop(&VH, &S);
+    displayCursorStack(VH, S);
 
-    push(&S, 100);
-    displayStack(&S);
+    push(&VH, &S, 100);
+    displayCursorStack(VH, S);
 
     return 0;
 }
