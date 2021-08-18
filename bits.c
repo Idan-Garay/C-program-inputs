@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "SETArray.h"
+#include "SETList.h"
 
 void displayBits(char val) {
     int bit = (sizeof(val)*8) -1;
@@ -12,13 +12,19 @@ void displayBits(char val) {
 
 int main() {
 
-    SET A = {{1,5,3,7,0,2}, 6};
-    SET B = {{3,0,55,1}, 4};
+    SET A = NULL;
+    SET B = NULL;
+    
+    int data[] = {23,34,61,1,0,25};
+    int data2[] = {1,2,3,4,5};
 
-    sortSet(&B);
-    SET C = unionn(A, B);
-    printf("Union:");
-    displaySet(C);
+    populateSetList(&A, data, 6);
+    displayList(A);
+    populateSetList(&B, data2, 5);
+    displayList(B);
+
+    SET C = unionList(&A, &B);
+    displayList(C);
 
     return 0;
 }
