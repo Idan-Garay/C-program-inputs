@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "SETList.h"
+#include "SETCursor.h"
 
 void displayBits(char val) {
     int bit = (sizeof(val)*8) -1;
@@ -12,19 +12,22 @@ void displayBits(char val) {
 
 int main() {
 
-    SET A = NULL;
-    SET B = NULL;
+    SET A;
+    SET B;
     
-    int data[] = {23,34,61,1,0,25};
-    int data2[] = {1,2,3,4,5};
+    int data[] = {1,2,3,4,5};
+    int data2[] = {6,7,8,9,10,11};
+    VHeap V;
 
-    populateSetList(&A, data, 6);
-    displayList(A);
-    populateSetList(&B, data2, 5);
-    displayList(B);
+    initVH(&V);
+    populateCursorSet(&V, &A, data, 5);
+    displayCursorSet(V, A);
+    populateCursorSet(&V, &B, data2, 6);
+    displayCursorSet(V, B);
 
-    SET C = unionList(&A, &B);
-    displayList(C);
+    printf("UNION SET: \n");
+    SET C = unionn(A, B, &V);
+    displayCursorSet(V, C);
 
     return 0;
 }
