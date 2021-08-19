@@ -10,7 +10,7 @@ void initBST(BST *B) {
     *B = NULL;
 }
 
-void insert(BST *B, int data) {
+void insert2(BST *B, int data) {
     BST *trav = B, tmp;
 
     while(*trav != NULL) {
@@ -21,6 +21,17 @@ void insert(BST *B, int data) {
         *trav = (BST) calloc(1, sizeof(node));
         (*trav)->data = data;
         (*trav)->LC = (*trav)->RC = NULL;
+    }
+}
+
+void insert(BST *B, int data) {
+    BST *trav = B;
+    if (*trav == NULL) {
+        *trav = (BST) calloc(1, sizeof(node));
+        (*trav)->data = data;
+        (*trav)->LC = (*trav)->RC = NULL;
+    } else {
+        (*trav)->data < data? insert(&(*trav)->RC, data) : insert(&(*trav)->LC, data);
     }
 }
 
