@@ -9,13 +9,15 @@ int main() {
     populateBST(&tree, data, 7);
     preOrder(tree);
     printf("\n");
-    
+
     insert(&tree, 6);
     preOrder(tree);
     printf("\n");
 
     removal(&tree, 5);
     preOrder(tree);
+
+    printf("\n exists? %d", member(tree, 20));
 
     return 0;
 }

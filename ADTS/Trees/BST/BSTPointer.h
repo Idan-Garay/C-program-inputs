@@ -82,3 +82,23 @@ void postOrder(BST B) {
         printf(" %d ->", B->data);
     }
 }
+
+int member2(BST B, int data) {
+	while (B != NULL && B->data != data) {
+		B = (B->data < data)? B->RC : B->LC;
+	}
+
+	return (B != NULL)? 1 : 0;
+}
+
+int member(BST B, int data){
+	if (B == NULL) {
+		return 0;
+	} else if (B->data == data) {
+		return 1;
+	} else if (B->data < data) {
+		return member(B->RC, data);
+	} else {
+		return member(B->LC, data);
+	}
+}
