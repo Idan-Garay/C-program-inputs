@@ -14,7 +14,7 @@ int main() {
     preOrder(tree);
     printf("\n");
 
-    removal(&tree, 5);
+    removal(&tree, 20);
     preOrder(tree);
 
     printf("\n exists? %d", member(tree, 20));

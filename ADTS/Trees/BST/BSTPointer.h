@@ -35,7 +35,7 @@ void insert(BST *B, int data) {
     }
 }
 
-void removal(BST *B, int data) {
+void removal2(BST *B, int data) {
     BST *trav = B;
 
     while (*trav != NULL && (*trav)->data != data) {
@@ -57,8 +57,32 @@ void removal(BST *B, int data) {
         } else {
             *trav = ((*trav)->LC == NULL)? freeNode->RC: freeNode->LC;
         }
-
         free(freeNode);
+    }
+}
+
+void removal(BST *B, int data) {
+
+    if ((*B)->data == data) {
+        BST tmp = *B;
+
+        if ((*B)->LC != NULL && (*B)->RC != NULL) {
+            BST *successor = &(*B)->RC;
+
+            while ((*successor)->LC != NULL)
+                successor = &(*successor)->LC;
+
+            (*successor)->LC = tmp->LC;
+            *B = *successor;
+            *successor = (*successor)->RC;
+            (*B)->RC = tmp->RC;
+
+        } else {
+            *B = (tmp->LC == NULL)? tmp->RC : tmp->LC;
+        }
+
+    } else if (*B != NULL) {
+       (*B)->data < data? removal(&(*B)->RC, data) : removal(&(*B)->LC, data); 
     }
 }
 
