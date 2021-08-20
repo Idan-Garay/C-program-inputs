@@ -78,12 +78,12 @@ void HeapSort(Heap *H) {
 
     orig = H->lastNdx;
     // 2.
-    while (H->lastNdx != -1) {
+    while (H->lastNdx != -1) { // ?? it's not in either method 1 or 2 nor in the notes
         p = 0;
         min = H->elems[p];
-        H->elems[p] = H->elems[H->lastNdx--];
+        H->elems[p] = H->elems[H->lastNdx--]; //removal
 
-        for (c = p*2+1; c <= H->lastNdx; c = p*2+1) {
+        for (c = p*2+1; c <= H->lastNdx; c = p*2+1) { // 
             if (c+1 <= H->lastNdx && H->elems[c+1] < H->elems[c])
                 c += 1;
 
@@ -100,6 +100,10 @@ void HeapSort(Heap *H) {
     }
     H->lastNdx = orig;
 }
+
+// void HeapSort(Heap *H) {
+
+// }
 
 void populateHeap(Heap *H, int data[], int dataSize) {
     int x;
