@@ -2,13 +2,13 @@
 
 int main() {
     Heap H;
-    int data[] = {3,5,9,6,8,9,10,10,18,9};
+    int data[] = {5,4,8,25,1,8,2};
 
     initHeap(&H);
     
-    populateHeap(&H, data, 10);
+    populateHeap(&H, data, 6);
     displayHeap(H);
 
-    printf("\nremoved element: %d", removal(&H));
+    HeapSort(&H);
     displayHeap(H);
 }
