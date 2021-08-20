@@ -26,53 +26,50 @@ void insert(Heap *H, int data) {
     }
 }
 
-int removal2(Heap *H) {
-    int retVal = -1;
-    if (H->lastNdx != -1) {
-        int p, c, smallest;
-
-        p = 0;
-        retVal = H->elems[p];
-        for (c = (p*2)+1; c <= H->lastNdx;) {
-            smallest = c;
-            
-            if (c+1 <= H->lastNdx) {
-                smallest = H->elems[c+1] < H->elems[smallest] ? c+1 : smallest;
-            } 
-
-            H->elems[p] = H->elems[smallest];
-            p = smallest;
-            c = (p*2)+1;
-        }
-        --H->lastNdx;
-    }
-
-    return retVal;
-}
-
 int removal (Heap *H) {
 	int min = -1;
 
 	if (H->lastNdx != -1) {
-		int c, p, swap;
-		
-		p = 0;
-		min = H->elems[p];
-		H->elems[p] = H->elems[H->lastNdx--];
-		for (c = p*2+1; c <= H->lastNdx;c = p*2+1) {
-			if (c+1 <= H->lastNdx && H->elems[c] > H->elems[c+1])
-				c += 1;
-			if (H->elems[p] > H->elems[c]) {
-                swap = H->elems[p];
+		int c, p, tmp;
+
+        p = 0;
+        min = H->elems[p];
+        tmp = H->elems[H->lastNdx--];
+        for (c = p*2+1; c <= H->lastNdx; c = p*2+1) {
+            if (c+1 <= H->lastNdx && H->elems[c+1] < H->elems[c])
+                c += 1;
+            if (tmp > H->elems[c]) {
                 H->elems[p] = H->elems[c];
-                H->elems[c] = swap;
                 p = c;
             } else {
                 break;
             }
-		}
+        }
+        H->elems[p] = tmp;
 	}
 	return min;
+}
+
+
+void minHeapify(Heap *H) {
+    int p, c, swap, lastNdx;
+
+    if (H->lastNdx != -1) {
+        lastNdx = (H->lastNdx-1)/2;
+        while(lastNdx >= 0) {
+            p = lastNdx;
+            c = p*2+1;
+            if (c+1 <= H->lastNdx && H->elems[c+1] < H->elems[c]) 
+                c += 1;
+                
+            if (H->elems[c] < H->elems[p]) {
+                swap = H->elems[c];
+                H->elems[c] = H->elems[p];
+                H->elems[p] = swap;
+            }
+            lastNdx--;
+        }
+    }
 }
 
 void HeapSort(Heap *H) {

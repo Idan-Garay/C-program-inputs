@@ -2,7 +2,7 @@
 
 int main() {
     Heap H;
-    int data[] = {5,4,8,25,1,8,2};
+    int data[] = {5,4,8,25,1,8};
 
     initHeap(&H);
     
@@ -10,5 +10,12 @@ int main() {
     displayHeap(H);
 
     HeapSort(&H);
+    displayHeap(H);
+
+    minHeapify(&H);
+    displayHeap(H);
+
+    printf("\n removed element: %d", removal(&H));
+    // removal(&H);
     displayHeap(H);
 }
