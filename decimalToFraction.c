@@ -4,21 +4,23 @@
 #include <stdlib.h>
 
 typedef char *String;
-typedef float Number;
+typedef long double Number;
 
 int getDecimalLength(Number n1)
 {
-  char c[20], *decimal;
-  sprintf(c, "%g", n1); // tokenize n1
+  char c[50], *decimal;
+  Number intpart;
+  n1 = modfl(n1, &intpart);
+  sprintf(c, "%.17Lg", n1); // tokenize n1
   strtok(c, ".");
   decimal = strtok(NULL, ".");
 
   return strlen(decimal);
 }
 
-int findGCF(int a, int b)
+unsigned long long int findGCF(unsigned long long int a, unsigned long long int b) // euclidian algo. to get the GCF of two integers
 {
-  int r;
+  unsigned long long int r;
 
   do
   {
@@ -30,16 +32,15 @@ int findGCF(int a, int b)
   return a;
 }
 
-float getTrailValues(Number n1, int decimalLength, int trail)
+Number getTrailValue(Number n1, int decimalLength, int trail) // before: trailValue return integer
 {
-  unsigned int place = pow(10, decimalLength);
-  int trace = pow(10, trail);
-  int x = n1 * place;
-  printf("length: %d, place: %u trail: %u x: %d %f sad\n", decimalLength, place, trace, x, (x % trace) / (float)(place));
-  return (x % trace) / (place);
+  unsigned long long int place, trace, x;
+  place = pow(10, decimalLength - trail);
+
+  return n1 - ((Number)((int)(n1 * place)) / place);
 }
 
-void simplifyFraction(int fraction[])
+void simplifyFraction(unsigned long long int fraction[])
 {
   int GCF = findGCF(fraction[0], fraction[1]);
 
@@ -47,33 +48,44 @@ void simplifyFraction(int fraction[])
   fraction[1] /= GCF;
 }
 
-void convertToFraction(Number n1, int negative, int trail)
+void convertToFraction(Number num, int negative, int trail)
 {
-  int decimalLength = getDecimalLength(n1);
-  printf("%f %d heree\n", n1, decimalLength);
-  int fraction[2];
-  unsigned int place = pow(10, decimalLength);
+  int decimalLength = getDecimalLength(num);
+  unsigned long long int fraction[2];
+  unsigned long long int place = pow(10, decimalLength);
 
   if (trail == 0)
   {
 
-    fraction[0] = n1 * place;
+    fraction[0] = num * place;
     fraction[1] = 1 * place;
   }
-  else
+  else // For repeating decimals
   {
-    unsigned int x = pow(10, trail);
-    float numerator = ((x * n1) - n1) + getTrailValues(n1, decimalLength, trail);
-    unsigned int z = pow(10, decimalLength - trail);
-    numerator = roundf(numerator * z) / z;
-    fraction[1] = x - 1;
-    if (floorf(numerator) != numerator)
-    {
-      place = pow(10, getDecimalLength(numerator));
+    // reference purpose: https://www.calculatorsoup.com/calculators/math/decimal-to-fraction-calculator.php
 
-      fraction[0] = numerator * place;
-      fraction[1] *= place;
-      printf("%d/%d \n", fraction[0], fraction[1]);
+    unsigned long long int leftSide, x, place2;
+    Number rightSide, numerator, trailValue;
+
+    x = pow(10, trail);
+    leftSide = x;
+    trailValue = getTrailValue(num, decimalLength, trail);
+    rightSide = (x * num) + trailValue; // soon to be numerator
+
+    leftSide = leftSide - 1;
+    rightSide = rightSide - num;
+
+    decimalLength = decimalLength - trail;
+
+    numerator = rightSide;
+
+    if (floorf(numerator) != numerator) // if numerator is still decimal
+    {
+      printf("decimalLength: %d trail: %d\n", decimalLength, trail);
+      place = pow(10, decimalLength);
+
+      fraction[0] = (numerator * place);
+      fraction[1] = leftSide * place;
     }
     else
     {
@@ -85,46 +97,73 @@ void convertToFraction(Number n1, int negative, int trail)
 
   if (negative)
   {
-    printf("-%.*f -> -%d/%d", decimalLength, n1, fraction[0], fraction[1]);
+    printf("-%.*Lf -> -%llu/%llu\n", decimalLength, num, fraction[0], fraction[1]);
   }
   else
   {
-    printf("%.*f -> %d/%d", decimalLength, n1, fraction[0], fraction[1]);
+    printf("%.*Lf -> %llu/%llu\n", decimalLength, num, fraction[0], fraction[1]);
   }
 }
 
-int main()
+int getTrail(int decimalLength)
 {
-  Number num;
-  int negative = 0;
   int trail = 0;
-  int proceed = 0;
-
-  while (!proceed)
-  {
-    printf("Input a number: ");
-    scanf("%f", &num);
-    if (floorf(num) == num)
-    {
-      if (num == 0)
-      {
-        printf("\nundefined");
-        return 205; // error signal
-      }
-      printf("\nNon-decimal Number alert! Program Exited.");
-      return 205; // error signal
-    }
-    proceed = 1;
-  }
 
   printf("Enter a trailing number: (0 for non-repeating) \n");
   scanf("%d", &trail);
 
-  if (num < 0)
+  if (trail < 0)
   {
-    num *= -1;
+    printf("NOT natural number alert!\n");
+    exit(205);
+  }
+
+  if (trail > decimalLength)
+  {
+    printf("Trail exceeded the length of decimal");
+    exit(205);
+  }
+  return trail;
+}
+
+int isNegative(Number *num)
+{
+  int negative = 0;
+
+  if (*num < 0)
+  {
+    *num *= -1;
     negative = 1;
   }
+  return negative;
+}
+
+Number getInput()
+{
+  Number num;
+  printf("Input a number: \n");
+  scanf("%Lf", &num);
+
+  if (floorf(num) == num) // rounds up decimal to tenths integer to check non-decimals
+  {
+    printf("\nNon-decimal Number alert! Program Exited.");
+    exit(205); // error signal
+  }
+  return num;
+}
+
+int main() // Start of the program
+{
+  Number num;
+  int negative = 0;
+  int trail = 0;
+
+  printf("Hello, This program accepts repeating decimal through trail fature. \n");
+  printf(" \n");
+  num = getInput();
+
+  trail = getTrail(getDecimalLength(num)); // a feature for repeating decimal where 0 for non repeating
+  negative = isNegative(&num);
 
   convertToFraction(num, negative, trail);
 
