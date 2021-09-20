@@ -10,7 +10,7 @@ int main()
   // testQuickSort(A, 8);
   // testBucketSort(B, 8);
   testCountingSort(A, 8);
-  // testRadixSort(C, 8);
+  // testRadixSort(A, 8);
 
   return 0;
 }

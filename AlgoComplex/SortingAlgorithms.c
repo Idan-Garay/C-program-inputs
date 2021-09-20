@@ -232,23 +232,23 @@ void insertionSort(ptr *List)
 
 // counting sort
 #include <string.h>
-void countingSort(int A[], int size)
+void countingSort(int A[], int size, int exp)
 {
   int *count, x;
   int B[size];
-  int _MAX = A[0];
+  int _MAX = A[0] % exp;
 
   memcpy(B, A, sizeof(int) * size);
   for (x = 1; x < size; x++)
   {
-    if (A[x] > _MAX)
-      _MAX = A[x];
+    if ((A[x] % exp) > _MAX)
+      _MAX = A[x] % exp;
   }
 
   count = (int *)calloc(_MAX + 1, sizeof(int));
   for (x = 0; x < size; x++)
   {
-    count[A[x]]++;
+    count[A[x] % exp]++;
   }
 
   for (x = 1; x <= _MAX; x++)
@@ -268,7 +268,40 @@ void testCountingSort(int A[], int size)
 
   printf("Counting Sort: \n");
   display(A, size);
-  countingSort(A, size);
+  countingSort(A, size, 1000);
+  printf(" -> ");
+  display(A, size);
+  printf("\n");
+}
+
+// radix sort
+
+void radixSort(int A[], int size)
+{
+  int x, largest;
+  largest = A[0];
+  printf(" -> 1");
+
+  for (x = 1; x < size; x++)
+  {
+    if (largest < A[x])
+      largest = A[x];
+  }
+  printf(" -> 2");
+
+  for (x = 10; (largest % x) != 0; x *= 10)
+  {
+    printf(" -> 3");
+    countingSort(A, size, x);
+  }
+}
+
+void testRadixSort(int A[], int size)
+{
+
+  printf("Radix Sort: \n");
+  display(A, size);
+  radixSort(A, size);
   printf(" -> ");
   display(A, size);
   printf("\n");
