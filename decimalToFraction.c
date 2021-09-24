@@ -5,6 +5,7 @@
 
 typedef char *String;
 typedef long double Number;
+typedef unsigned long long int HugePositiveInteger;
 
 int getDecimalLength(Number n1)
 {
@@ -18,9 +19,9 @@ int getDecimalLength(Number n1)
   return strlen(decimal);
 }
 
-unsigned long long int findGCF(unsigned long long int a, unsigned long long int b) // euclidian algo. to get the GCF of two integers
+HugePositiveInteger findGCF(HugePositiveInteger a, HugePositiveInteger b) // euclidian algo. to get the GCF of two integers
 {
-  unsigned long long int r;
+  HugePositiveInteger r;
 
   do
   {
@@ -34,15 +35,15 @@ unsigned long long int findGCF(unsigned long long int a, unsigned long long int 
 
 Number getTrailValue(Number n1, int decimalLength, int trail) // before: trailValue return integer
 {
-  unsigned long long int place, trace, x;
+  HugePositiveInteger place, trace, x;
   place = pow(10, decimalLength - trail);
 
   return n1 - ((Number)((int)(n1 * place)) / place);
 }
 
-void simplifyFraction(unsigned long long int fraction[])
+void simplifyFraction(HugePositiveInteger fraction[])
 {
-  int GCF = findGCF(fraction[0], fraction[1]);
+  HugePositiveInteger GCF = findGCF(fraction[0], fraction[1]);
 
   fraction[0] /= GCF;
   fraction[1] /= GCF;
@@ -51,12 +52,11 @@ void simplifyFraction(unsigned long long int fraction[])
 void convertToFraction(Number num, int negative, int trail)
 {
   int decimalLength = getDecimalLength(num);
-  unsigned long long int fraction[2];
-  unsigned long long int place = pow(10, decimalLength);
+  HugePositiveInteger fraction[2];
+  HugePositiveInteger place = pow(10, decimalLength);
 
   if (trail == 0)
   {
-
     fraction[0] = num * place;
     fraction[1] = 1 * place;
   }
@@ -64,7 +64,7 @@ void convertToFraction(Number num, int negative, int trail)
   {
     // reference purpose: https://www.calculatorsoup.com/calculators/math/decimal-to-fraction-calculator.php
 
-    unsigned long long int leftSide, x, place2;
+    HugePositiveInteger leftSide, x, place2;
     Number rightSide, numerator, trailValue;
 
     x = pow(10, trail);
@@ -79,12 +79,12 @@ void convertToFraction(Number num, int negative, int trail)
 
     numerator = rightSide;
 
-    if (floorf(numerator) != numerator) // if numerator is still decimal
+    if (floorl(numerator) != numerator) // if numerator is still decimal
     {
-      printf("decimalLength: %d trail: %d\n", decimalLength, trail);
       place = pow(10, decimalLength);
+      printf("%Lf/%llu d\n", (numerator), leftSide);
 
-      fraction[0] = (numerator * place);
+      fraction[0] = (numerator * place) + 1;
       fraction[1] = leftSide * place;
     }
     else
@@ -94,7 +94,9 @@ void convertToFraction(Number num, int negative, int trail)
   }
 
   simplifyFraction(fraction);
+  decimalLength = getDecimalLength(num); //restore the input's decimal Length;
 
+  printf("\nConverting decimal to Fraction...\n");
   if (negative)
   {
     printf("-%.*Lf -> -%llu/%llu\n", decimalLength, num, fraction[0], fraction[1]);
@@ -141,10 +143,22 @@ int isNegative(Number *num)
 Number getInput()
 {
   Number num;
-  printf("Input a number: \n");
-  scanf("%Lf", &num);
+  char input[30];
+  char *ptr;
 
-  if (floorf(num) == num) // rounds up decimal to tenths integer to check non-decimals
+  printf("Note: Append '...' after input for imaginary number:\n");
+  printf("\nInput a number:\n");
+  scanf("%s", input);
+
+  if (strcmp(input + (strlen(input) - 3), "...") == 0)
+  {
+    printf("%s is an imaginary number.\n", input);
+    exit(0); // OK signal
+  }
+
+  num = strtold(input, &ptr);
+
+  if (floorl(num) == num) // rounds up decimal to tenths integer to check non-decimals
   {
     printf("\nNon-decimal Number alert! Program Exited.");
     exit(205); // error signal
@@ -157,9 +171,9 @@ int main() // Start of the program
   Number num;
   int negative = 0;
   int trail = 0;
+  int choice = 0;
 
-  printf("Hello, This program accepts repeating decimal through trail fature. \n");
-  printf(" \n");
+  printf("\n ++ Hello, This program accepts repeating decimal through trail feature ++ \n");
   num = getInput();
 
   trail = getTrail(getDecimalLength(num)); // a feature for repeating decimal where 0 for non repeating

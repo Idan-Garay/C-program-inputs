@@ -157,50 +157,50 @@ void displayBuckets(ptr A[], int size)
   }
 }
 
-void bucketSort(float A[], int size)
-{
-  ptr trav, *buckets = calloc(size, sizeof(ptr));
-  int x, k, idx;
-  float _MAX = A[0];
+// void bucketSort(float A[], int size)
+// {
+//   ptr trav, *buckets = calloc(size, sizeof(ptr));
+//   int x, k, idx;
+//   float _MAX = A[0];
 
-  for (x = 1; x < size; x++)
-  {
-    if (_MAX < A[x])
-      _MAX = A[x];
-  }
+//   for (x = 1; x < size; x++)
+//   {
+//     if (_MAX < A[x])
+//       _MAX = A[x];
+//   }
 
-  for (x = 0; x < size; x++)
-  {
-    idx = (A[x] * size);
-    ptr element = malloc(sizeof(node));
-    element->val = A[x];
-    element->next = buckets[idx];
-    buckets[idx] = element;
-  }
+//   for (x = 0; x < size; x++)
+//   {
+//     idx = (A[x] * size);
+//     ptr element = malloc(sizeof(node));
+//     element->val = A[x];
+//     element->next = buckets[idx];
+//     buckets[idx] = element;
+//   }
 
-  k = 0;
-  for (x = 0; x < size; x++)
-  {
-    insertionSort(buckets + x);
-    for (trav = buckets[x]; k < size && trav != NULL; trav = trav->next)
-    {
-      A[k++] = trav->val;
-    }
-  }
+//   k = 0;
+//   for (x = 0; x < size; x++)
+//   {
+//     insertionSort(buckets + x);
+//     for (trav = buckets[x]; k < size && trav != NULL; trav = trav->next)
+//     {
+//       A[k++] = trav->val;
+//     }
+//   }
 
-  free(buckets);
-}
+//   free(buckets);
+// }
 
-void testBucketSort(float A[], int size)
-{
+// void testBucketSort(float A[], int size)
+// {
 
-  printf("Bucket Sort: \n");
-  displayF(A, size);
-  bucketSort(A, size);
-  printf(" -> ");
-  displayF(A, size);
-  printf("\n");
-}
+//   printf("Bucket Sort: \n");
+//   displayF(A, size);
+//   bucketSort(A, size);
+//   printf(" -> ");
+//   displayF(A, size);
+//   printf("\n");
+// }
 
 void insertionSort(ptr *List)
 {
@@ -234,21 +234,22 @@ void insertionSort(ptr *List)
 #include <string.h>
 void countingSort(int A[], int size, int exp)
 {
-  int *count, x;
+  int *count, x, digit;
   int B[size];
-  int _MAX = A[0] % exp;
+  int _MAX = A[0] % exp / (exp / 10);
 
   memcpy(B, A, sizeof(int) * size);
   for (x = 1; x < size; x++)
   {
-    if ((A[x] % exp) > _MAX)
-      _MAX = A[x] % exp;
+    digit = (A[x] % exp) / (exp / 10);
+    if (digit > _MAX)
+      _MAX = digit;
   }
 
   count = (int *)calloc(_MAX + 1, sizeof(int));
   for (x = 0; x < size; x++)
   {
-    count[A[x] % exp]++;
+    count[(A[x] % exp) / (exp / 10)]++;
   }
 
   for (x = 1; x <= _MAX; x++)
@@ -258,7 +259,7 @@ void countingSort(int A[], int size, int exp)
 
   for (x = size - 1; x >= 0; x--)
   {
-    A[--count[B[x]]] = B[x];
+    A[--count[(B[x] % exp) / (exp / 10)]] = B[x];
   }
   free(count);
 }
@@ -268,7 +269,7 @@ void testCountingSort(int A[], int size)
 
   printf("Counting Sort: \n");
   display(A, size);
-  countingSort(A, size, 1000);
+  countingSort(A, size, 1);
   printf(" -> ");
   display(A, size);
   printf("\n");
@@ -280,25 +281,21 @@ void radixSort(int A[], int size)
 {
   int x, largest;
   largest = A[0];
-  printf(" -> 1");
 
   for (x = 1; x < size; x++)
   {
     if (largest < A[x])
       largest = A[x];
   }
-  printf(" -> 2");
 
-  for (x = 10; (largest % x) != 0; x *= 10)
+  for (x = 10; (largest / x) != 0; x *= 10)
   {
-    printf(" -> 3");
     countingSort(A, size, x);
   }
 }
 
 void testRadixSort(int A[], int size)
 {
-
   printf("Radix Sort: \n");
   display(A, size);
   radixSort(A, size);
