@@ -243,7 +243,7 @@ void countingSort(int A[], int size, int exp)
   {
     digit = (A[x] % exp) / (exp / 10);
     if (digit > _MAX)
-      _MAX = digit;
+      _MAX = digit; 
   }
 
   count = (int *)calloc(_MAX + 1, sizeof(int));

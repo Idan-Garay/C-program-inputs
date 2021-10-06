@@ -1,5 +1,5 @@
-int input[] = {9, 7, 8, 3, 2, 1};
-int size = 6;
+int input[] = {38, 27, 43, 3, 9, 82, 10};
+int size = 7;
 
 void display(int arr[], int size)
 {

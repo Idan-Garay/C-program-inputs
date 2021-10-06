@@ -1,0 +1,2 @@
+
+  displayHeap(A);
