@@ -1,0 +1,2 @@
+
+    displayMatrix(A);
