@@ -79,25 +79,33 @@ void merge2Lists(List *out, List *in)
 {
   List *outTrav, *inTrav, hold;
 
-  outTrav = out;
-  inTrav = in;
-  while (*inTrav != NULL)
+  if (*out == NULL)
   {
-    if ((*outTrav)->elem > (*inTrav)->elem)
+    *out = *in;
+  }
+  else
+  {
+    outTrav = out;
+    inTrav = in;
+    while (*inTrav != NULL)
     {
-      hold = *inTrav;
-      *inTrav = (*inTrav)->link;
-      hold->link = *outTrav;
-      *outTrav = hold;
+      if ((*outTrav)->elem > (*inTrav)->elem)
+      {
+        hold = *inTrav;
+        *inTrav = (*inTrav)->link;
+        hold->link = *outTrav;
+        *outTrav = hold;
+      }
+
+      outTrav = &(*outTrav)->link;
     }
-    outTrav = &(*outTrav)->link;
   }
 }
 
 int main()
 {
-  int arr[] = {10, 5, 30, 40, 2, 4, 9};
-  // int arr[] = {21, 15, 1, 6, 9, 0, 17, 100, 20, 5, 33, 65, 2, 10, 89};
+  // int arr[] = {10, 5, 30, 40, 2, 4, 9};
+  int arr[] = {21, 15, 1, 6, 9, 0, 17, 100, 20, 5, 33, 65, 2, 10, 89};
   int num = sizeof(arr) / sizeof(int);
 
   // task 1

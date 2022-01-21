@@ -3,7 +3,14 @@
 void display(int arr[], int size);
 void test(int A[], int size, int start, int end);
 
-int partition(int A[], int start, int end)
+void swap(int *a, int *b)
+{
+  int tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+
+int partitionInternetVar(int A[], int start, int end)
 {
   int i, temp, j, pivot;
   pivot = A[start];
@@ -25,11 +32,32 @@ int partition(int A[], int start, int end)
   return i - 1;
 }
 
+int partitionLomuto(int A[], int start, int end)
+{
+  int i, j, pivot;
+
+  pivot = A[end];
+  i = start - 1;
+
+  for (j = start; j < end; j++)
+  {
+    if (A[j] <= pivot)
+    {
+      i++;
+      swap(A + j, A + i);
+    }
+  }
+
+  swap(A + (i + 1), A + end); // swap(A[i+1], A[end])
+  return i + 1;
+}
+
 void quickSort(int A[], int start, int end)
 {
   if (start < end)
   {
-    int pivot = partition(A, start, end);
+    int pivot = partitionInternetVar(A, start, end);
+    display(A, 8);
     quickSort(A, start, pivot - 1);
     quickSort(A, pivot + 1, end);
   }
@@ -37,24 +65,24 @@ void quickSort(int A[], int start, int end)
 
 int main()
 {
-  int arr[] = {9, 7, 8, 3, 2, 1};
-  test(arr, 6, 0, 5);
+  int arr[] = {2, 8, 7, 1, 3, 5, 6, 4};
+  test(arr, 8, 0, 7);
 }
 
 void display(int arr[], int size)
 {
   int x;
 
-  printf("\n");
   for (x = 0; x < size; x++)
   {
     printf(" %d", arr[x]);
   }
+  printf("\n");
 }
 
 void test(int A[], int size, int start, int end)
 {
   display(A, size);
   quickSort(A, start, end);
-  display(A, size);
+  // display(A, size);
 }

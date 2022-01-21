@@ -13,15 +13,16 @@ void shellSort(int A[], int size)
       for (y = x; y >= gap && tmp < A[y - gap]; y -= gap)
         A[y] = A[y - gap];
       A[y] = tmp;
-      printf("\n[%d]: ", x);
-      display(A, size);
     }
+    printf("\n[%d]: ", gap);
+    display(A, size);
   }
 }
 
 int main()
 {
-  test(input, size);
+  int input2[] = {8, 3, 6, 9, 7, 0};
+  test(input2, 6);
   return 0;
 }
 

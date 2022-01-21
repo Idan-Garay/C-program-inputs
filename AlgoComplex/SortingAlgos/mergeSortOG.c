@@ -6,31 +6,30 @@ void test(int A[], int size, int start, int end);
 
 void merge(int A[], int start, int mid, int end)
 {
-  int p = start, q = mid + 1;
+  int q, p, k, x;
+  int arr[end-start+1];
 
-  int Arr[end - start + 1], k = 0;
+  p = start;
+  q = mid+1;
+  k = 0;
 
-  for (int i = start; i <= end; i++)
-  {
-    if (p > mid) //checks if first part comes to an end or not .
-      Arr[k++] = A[q++];
-
-    else if (q > end) //checks if second part comes to an end or not
-      Arr[k++] = A[p++];
-
-    else if (A[p] < A[q]) //checks which part has smaller element.
-      Arr[k++] = A[p++];
-
+  for (x = start; x <= end; x++) {
+    if (p > mid) 
+      arr[k++] = A[q++];
+    else if (q > end)
+      arr[k++] = A[p++];
+    else if(A[p] < A[q])
+      arr[k++] = A[p++];
     else
-      Arr[k++] = A[q++];
+      arr[k++] = A[q++];
   }
-  for (int p = 0; p < k; p++)
-  {
-    /* Now the real array has elements in sorted manner including both 
-        parts.*/
-    A[start++] = Arr[p];
+
+  for (x = 0; x < k; x++) {
+    A[start++] = arr[x];
   }
 }
+
+
 
 void mergeSort(int A[], int lo, int hi)
 {

@@ -8,7 +8,7 @@ void shellSort(int A[], int size)
 
   for (gap = size / 2; gap > 0; gap /= 2)
   {
-    for (x = gap; x < size; x += gap)
+    for (x = gap; x < size; x++)
     {
       temp = A[x];
       for (y = x; y > 0 && temp < A[y - gap]; y -= gap)
@@ -86,11 +86,17 @@ void testMergeSort(int A[], int size)
 
 // quick sort
 
+void swap(int *a, int *b) {
+  int tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+
 int partition(int A[], int lo, int hi)
 {
   int pivot = A[hi];
 
-  int i, j, swap;
+  int i, j;
 
   i = lo - 1;
   for (j = lo; j < hi; j++)
@@ -98,14 +104,10 @@ int partition(int A[], int lo, int hi)
     if (A[j] < pivot)
     {
       i++;
-      swap = A[j];
-      A[j] = A[i];
-      A[i] = swap;
+      swap(&A[j], &A[i]);
     }
   }
-  swap = A[i + 1];
-  A[i + 1] = A[hi];
-  A[hi] = swap;
+  swap(&A[i + 1], &A[hi]);
 
   return i + 1;
 }
